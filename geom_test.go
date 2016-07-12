@@ -1,9 +1,6 @@
 package geom
 
-import (
-	"reflect"
-	"testing"
-)
+import "testing"
 
 var (
 	_ = []T{
@@ -33,21 +30,6 @@ var (
 func aliases(x, y []float64) bool {
 	// http://golang.org/src/pkg/math/big/nat.go#L340
 	return cap(x) > 0 && cap(y) > 0 && &x[0:cap(x)][cap(x)-1] == &y[0:cap(y)][cap(y)-1]
-}
-
-func TestSet(t *testing.T) {
-	for _, tc := range []struct {
-		c, other, want Coord
-	}{
-		{Coord{1.0, 2.0}, Coord{2.0, 3.0}, Coord{2.0, 3.0}},
-		{Coord{1.0, 2.0, 3.0}, Coord{2.0, 3.0, 4.0}, Coord{2.0, 3.0, 4.0}},
-		{Coord{1.0, 2.0}, Coord{2.0, 3.0, 4.0}, Coord{2.0, 3.0}},
-		{Coord{1.0, 2.0, 3.0}, Coord{2.0, 3.0}, Coord{2.0, 3.0, 3.0}},
-	} {
-		if tc.c.Set(tc.other); !reflect.DeepEqual(tc.c, tc.want) {
-			t.Errorf("%v.Set(%v); got %v, want %v", tc.c, tc.other, tc.c, tc.want)
-		}
-	}
 }
 
 func TestLayoutString(t *testing.T) {
@@ -258,44 +240,6 @@ func TestEqualCoords(t *testing.T) {
 	} {
 		if tc.c1.Equal(tc.layout, tc.c2) != tc.equal {
 			t.Errorf("%v.Equals(%s, %v) is not '%v'", tc.c1, tc.layout, tc.c2, tc.equal)
-		}
-	}
-}
-func TestSetCoord(t *testing.T) {
-	for _, tc := range []struct {
-		src, dest Coord
-		expected  Coord
-		layout    Layout
-	}{
-		{
-			src:      Coord{0, 0},
-			dest:     Coord{1, 1},
-			expected: Coord{0, 0},
-			layout:   XY,
-		},
-		{
-			src:      Coord{1, 0},
-			dest:     Coord{},
-			expected: Coord{},
-			layout:   Layout(0),
-		},
-		{
-			src:      Coord{},
-			dest:     Coord{1, 2},
-			expected: Coord{1, 2},
-			layout:   XY,
-		},
-		{
-			src:      Coord{3},
-			dest:     Coord{1, 2},
-			expected: Coord{3, 2},
-			layout:   XY,
-		},
-	} {
-
-		tc.dest.Set(tc.src)
-		if !tc.dest.Equal(tc.layout, tc.expected) {
-			t.Errorf("Setting %v with %v did not result in %v", tc.dest, tc.src, tc.dest)
 		}
 	}
 }

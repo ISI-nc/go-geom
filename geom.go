@@ -80,11 +80,6 @@ func (c Coord) Y() float64 {
 	return c[1]
 }
 
-// Set copies the ordinate data from the other coord to this coord
-func (c Coord) Set(other Coord) {
-	copy(c, other)
-}
-
 // Equal compares that all ordinates are the same in this and the other coords.
 // It is assumed that this coord and other coord both have the same (provided) layout
 func (c Coord) Equal(layout Layout, other Coord) bool {
